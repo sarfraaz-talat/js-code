@@ -42,15 +42,15 @@ class SegmentTree {
         this._seg_tree[pos] = this._operate(this._seg_tree[this._left(pos)], this._seg_tree[this._right(pos)]);
     }
 
-    _range(query_low, query_high, range_low, range_high, pos) {
+    _query(query_low, query_high, range_low, range_high, pos) {
         if (range_low >= query_low && range_high <= query_high)
             return this._seg_tree[pos];
         else if (query_high < range_low || range_high < query_low)
             return this.sentinel;
         else {
             let mid = (range_low + range_high) >>> 1;
-            let left = this._range(query_low, query_high, range_low, mid, this._left(pos));
-            let right = this._range(query_low, query_high, mid + 1, range_high, this._right(pos));
+            let left = this._query(query_low, query_high, range_low, mid, this._left(pos));
+            let right = this._query(query_low, query_high, mid + 1, range_high, this._right(pos));
             return this._operate(left, right);
         }
     }
@@ -72,8 +72,8 @@ class SegmentTree {
     }
 
     // Public Methods
-    range(query_low, query_high) {
-        return this._range(query_low, query_high, 0, this._length - 1, 0);
+    query(query_low, query_high) {
+        return this._query(query_low, query_high, 0, this._length - 1, 0);
     }
 
     update(new_value, index) {
